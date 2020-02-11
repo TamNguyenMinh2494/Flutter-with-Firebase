@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:firebaseapp/services/auth.dart';
-import 'package:firebaseapp/models/user.dart';
+import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function toggleView;
-  SignIn({this.toggleView});
+  Register({this.toggleView});
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
   String email = '';
   String password = '';
   String error = '';
@@ -20,18 +20,18 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.brown[100],
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign in'),
+        title: Text('Sign up'),
         actions: <Widget>[
           FlatButton.icon(
               onPressed: () {
                 widget.toggleView();
               },
               icon: Icon(Icons.person),
-              label: Text('Register'))
+              label: Text('Sign in'))
         ],
       ),
       body: Container(
@@ -50,8 +50,9 @@ class _SignInState extends State<SignIn> {
                   SizedBox(height: 20.0),
                   TextFormField(
                     obscureText: true,
-                    validator: (val) =>
-                        val.length < 6 ? 'Enter your password' : null,
+                    validator: (val) => val.length < 6
+                        ? 'Enter your password at least 6 characters'
+                        : null,
                     onChanged: (val) {
                       setState(() => password = val);
                     },
@@ -60,17 +61,16 @@ class _SignInState extends State<SignIn> {
                   RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        dynamic result = await _auth.signInWithEmailandPassword(
-                            email, password);
+                        dynamic result = await _auth
+                            .registerWithEmailandPassword(email, password);
                         if (result == null) {
-                          setState(() =>
-                              error = 'Sign in failes. Please Try it again!!!');
+                          setState(() => error = 'Invalid email');
                         }
                       }
                     },
                     color: Colors.pink[400],
                     child:
-                        Text('Sign in', style: TextStyle(color: Colors.white)),
+                        Text('Register', style: TextStyle(color: Colors.white)),
                   ),
                   SizedBox(height: 12.0),
                   Text(
